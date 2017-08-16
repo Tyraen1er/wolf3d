@@ -2,13 +2,32 @@
 
 char	*ft_parsing(char *file)
 {
-	int		a;
+	int		x;
 	
-	a = 0;
-	while (file[a] != '\n' && file[a] != '\0')
-		++a;
+	while (get_next_line)
+/*	int		y;
+	int		length;
+	
+	length = 1;
+	x = 0;
+	y = 0;
+	while (file[x] != '\0')
+	{
+		if (file[x] == '\n')
+			++y;
+		++x;
+	}
+	while (file[length] != '\n' && file[length] != '\0')
+		++length;
+	y = 0;
+	while (file[x] != '\0' && !(x = 0))
+	{
+		
+	}
+	printf("end\n");
+*/
 }
-
+/*
 int		my_key_fct(int keycode, void *data)
 {
 	printf("keycode = %d\n", keycode);
@@ -28,7 +47,7 @@ int		ft_display(char **map)
 	mlx_loop(all[0]);
 	return (1);
 }
-
+*/
 int		main(int argc, char **argv)
 {
 	int		fd;
@@ -51,8 +70,9 @@ int		main(int argc, char **argv)
 		ft_memdel((void *)&map);
 		map = tmp;
 	}
-	if (a == -1 || (!(map = ft_parsing(map)) &&
-			!(ft_display(ft_convert(map)))))
+//	if (a == -1 || (!(map = ft_parsing(map)) &&
+//			!(ft_display(ft_convert(map)))))
+	if (a == -1 || (!(map = ft_parsing(map))))
 		ft_putstr("error read or display\n");
 	return (0);
 }

@@ -12,12 +12,25 @@
 
 #ifndef LIBFT_H
 # define LIBFT_H
+# define BUFF_SIZE 100
 
 # include <string.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
+
+
+
+typedef struct					s_fdline
+{
+	int							fd;
+	int							p;
+	int							pm;
+	char						buf[BUFF_SIZE + 1];
+	struct s_fdline				*next;
+	struct s_fdline				*begin;
+}								t_fdline;
 
 typedef	struct					s_list
 {
@@ -81,6 +94,7 @@ t_bmp							ft_uncompress_bitmap(t_bmp old);
 int								*ft_read_bits(unsigned char *comp, int buf,
 		int len);
 int								ft_read_allstr(int fd, void **file);
+int								get_next_line(const int fd, char**line);
 void							ft_exit(int error);
 int								ft_read_all(int fd, void **datafile);
 void							*ft_memset(void *b, int c, size_t len);
