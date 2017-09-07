@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 # our executable name
-NAME			:=	fractol
+NAME			:=	wolf
 
 # base dirs
 SRC_DIR			:=	./src
@@ -20,7 +20,8 @@ LIB_DIR			:=	./libs
 OBJ_DIR			:=	./obj
 
 # files to compile
-FILE_LIST		:=	wolf.c
+FILE_LIST		:=	wolf.c	\
+					pars.c
 
 OBJ_FILES		:= $(addprefix $(OBJ_DIR)/,$(FILE_LIST:.c=.o))
 

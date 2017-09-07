@@ -1,32 +1,5 @@
 #include "wolf.h"
 
-char	*ft_parsing(char *file)
-{
-	int		x;
-	
-	while (get_next_line)
-/*	int		y;
-	int		length;
-	
-	length = 1;
-	x = 0;
-	y = 0;
-	while (file[x] != '\0')
-	{
-		if (file[x] == '\n')
-			++y;
-		++x;
-	}
-	while (file[length] != '\n' && file[length] != '\0')
-		++length;
-	y = 0;
-	while (file[x] != '\0' && !(x = 0))
-	{
-		
-	}
-	printf("end\n");
-*/
-}
 /*
 int		my_key_fct(int keycode, void *data)
 {
@@ -48,31 +21,17 @@ int		ft_display(char **map)
 	return (1);
 }
 */
+
 int		main(int argc, char **argv)
 {
-	int		fd;
-	int		a;
-	char	buf[151];
-	char	*map;
-	char	*tmp;
+	char	**map;
 
-	map = ft_memalloc(1);
 	if (argc != 2)
 	{
 		ft_putstr("usage: ./wolf3d fichier_map\n");
 		return (0);
 	}
-	fd = open(argv[1], O_RDONLY);
-	while ((a = read(fd, buf, 150)) && a != -1)
-	{
-		buf[a] = 0;
-		tmp = ft_strjoin(map, buf);
-		ft_memdel((void *)&map);
-		map = tmp;
-	}
-//	if (a == -1 || (!(map = ft_parsing(map)) &&
-//			!(ft_display(ft_convert(map)))))
-	if (a == -1 || (!(map = ft_parsing(map))))
-		ft_putstr("error read or display\n");
+	if ((map = loadfile(argv[1])) == NULL)
+		ft_exit(1);
 	return (0);
 }

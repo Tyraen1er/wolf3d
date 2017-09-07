@@ -18,6 +18,8 @@ void	ft_exit(int error)
 		ft_putstr("error read / open\n");
 	else if (error == 1)
 		ft_putstr("error input data\n");
+	else if (error == 2)
+		ft_putstr("error allocation\n");
 	else
 		ft_putstr("error\n");
 	exit(3);

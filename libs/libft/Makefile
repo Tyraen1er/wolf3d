@@ -90,6 +90,7 @@ FILE_LIST	:=	ft_memset.c					\
 				ft_read_bits.c				\
 				ft_uncompress_bitmap.c		\
 				ft_load_bitmap.c			\
+				ft_readfile.c				\
 				get_next_line.c
 
 OBJ_FILES	:=	$(addprefix $(OBJ_DIR)/,$(FILE_LIST:.c=.o))

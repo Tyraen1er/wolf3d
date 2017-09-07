@@ -124,6 +124,7 @@ char							*ft_strrchr(const char *s, int c);
 char							*ft_strstr(const char *big, const char *little);
 char							*ft_strnstr(const char *big, const char *little,
 		size_t len);
+char							*ft_readfile(int fd);
 int								ft_atoi_hex(char *nb);
 int								ft_power(int a, int b);
 int								ft_root(int a, int b);
