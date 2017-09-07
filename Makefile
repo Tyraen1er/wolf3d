@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 # our executable name
-NAME			:=	wolf
+NAME			:=	wolf3d
 
 # base dirs
 SRC_DIR			:=	./src
@@ -32,7 +32,8 @@ LIB_FT_LINK		:=	-L $(LIB_FT) -l ft
 
 LIB_MLX			:=	$(LIB_DIR)/MinilibX
 LIB_MLX_INC		:=	-I $(LIB_MLX)
-LIB_MLX_LINK	:=	-L $(LIB_MLX) -l mlx
+LIB_MLX_LINK	:=	-L $(LIB_MLX) -l mlx -framework OpenGL -framework Appkit
+
 # our project
 INCLUDES		:=	$(LIB_FT_INC) $(LIB_MLX_INC) -I$(INC_DIR)
 LINK			:=	$(LIB_FT_LINK) $(LIB_MLX_LINK) -fsanitize=address

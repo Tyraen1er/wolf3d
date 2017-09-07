@@ -18,10 +18,7 @@ void	*ft_memalloc(size_t sze)
 
 	if (!(spc = malloc(sze)))
 		ft_exit(2);
-	else
-	{
-		while (sze--)
-			((char *)spc)[sze] = 0;
-		return (spc);
-	}
+	while (sze--)
+		((char *)spc)[sze] = 0;
+	return (spc);
 }
