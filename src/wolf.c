@@ -24,7 +24,7 @@ int		ft_display(char **map)
 
 int		main(int argc, char **argv)
 {
-	char	**map;
+	float	**map;
 
 	if (argc != 2)
 	{

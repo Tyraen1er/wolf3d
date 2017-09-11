@@ -8,7 +8,26 @@ typedef struct	s_mlx
 	void		*win;
 }				t_mlx;
 
-char	**loadfile(char *argv);
-int		pars(char *map);
+typedef struct	s_coord
+{
+	float		x;
+	float		y;
+}				t_coord;
+
+typedef struct	s_view
+{
+	t_coord		begin;
+	t_coord		end;
+}				t_view;
+
+typedef struct	s_map
+{
+	float		**map;
+	t_coord		player;
+	t_view		view;
+}				t_map;
+
+float	**loadfile(char *argv);
+int		pars(char map);
 
 #endif
