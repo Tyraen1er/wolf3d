@@ -51,6 +51,7 @@ int		checkmap(char *map)
 				while (ft_isdigit(map[a]))
 					++a;
 		}
+		printf("c = %d b = %d\n", c, b);
 		if (b != c)
 			ft_exit(1);
 	}
@@ -59,52 +60,35 @@ int		checkmap(char *map)
 	return (b);
 }
 
-void	printf_map(t_map data, int nbl, int nb_elem)
-{
-	int i;
-	int j;
-
-	i = -1;
-	while(++i < nbl)
-	{
-		j = -1;
-		while(++j < nb_elem)
-			printf("%d ", (int)data.map[i][j]);
-		printf("\n");
-	}
-
-}
-
 t_map load_data(int nbl, int nb_elem, char *map, int i)
 {
 	t_map data;
 	int j;
 	int k;
-	
+
 	k = 0;
-	while (!ft_isdigit(map[k]) && map[k])
-		k++;
 	data.map = ft_memalloc(sizeof(float *) * nbl);
 	while(++i < nbl)
 	{
 		j = -1;
 		data.map[i] = ft_memalloc(sizeof(float) * nb_elem);
+		while (map[k] && !ft_isdigit(map[k]) && map[k] != 'X')
+			k++;
 		while(++j < nb_elem)
-		{	
+		{
+			if (map[k] == 'X' && (data.player.x = j + 0.5))
+				data.player.y = i + 0.5;
 			data.map[i][j] = (float)ft_atoi(map + k);
 			while (ft_isdigit(map[k]))
 				++k;
-			while (!ft_isdigit(map[++k]) && map[k])
-				if (map[k] == 'X' && (data.player.x = j + 1))
-					if (j++)
-						data.player.y = i;
+			while (map[++k] && !ft_isdigit(map[k]) && map[k] != '\n' && map[k] != 'X')
+				;
 		}
 	}
-	printf_map(data, nbl, nb_elem);	
 	return(data);
 }
 
-float	**loadfile(char *argv)
+t_map	loadfile(char *argv)
 {
 	int		fd;
 	int		nb_elem;
@@ -120,6 +104,6 @@ float	**loadfile(char *argv)
 	//	if (a == -1 || (!(map = ft_parsing(map, fd)) &&
 	//			!(ft_display(ft_convert(map)))))
 	//	return (parsing(map));
-	printf("coucou\n");
-	return (NULL);
+	printf("fin parsing\n");
+	return (data);
 }

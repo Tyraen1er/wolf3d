@@ -27,7 +27,11 @@ typedef struct	s_map
 	t_view		view;
 }				t_map;
 
-float	**loadfile(char *argv);
+int		checkmap(char *map);
+int		nb_lines(char *map);
+int		nb_nb_line(char *map);
 int		pars(char map);
+t_map	loadfile(char *argv);
+t_map	load_data(int nbl, int nb_elem, char *map, int i);
 
 #endif

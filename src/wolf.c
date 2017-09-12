@@ -24,14 +24,14 @@ int		ft_display(char **map)
 
 int		main(int argc, char **argv)
 {
-	float	**map;
+	t_map	map;
 
 	if (argc != 2)
 	{
 		ft_putstr("usage: ./wolf3d fichier_map\n");
 		return (0);
 	}
-	if ((map = loadfile(argv[1])) == NULL)
+	if ((map = loadfile(argv[1])).map == NULL)
 		ft_exit(1);
 	return (0);
 }
