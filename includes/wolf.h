@@ -1,6 +1,7 @@
 #ifndef WOLF_H
 # define WOLF_H
 # include "libft.h"
+# include "mlx.h"
 
 typedef struct	s_mlx
 {

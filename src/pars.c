@@ -101,9 +101,6 @@ t_map	loadfile(char *argv)
 	nb_elem = checkmap(map);
 	nbl = nb_lines(map);
 	data = load_data(nbl, nb_elem, map, -1);
-	//	if (a == -1 || (!(map = ft_parsing(map, fd)) &&
-	//			!(ft_display(ft_convert(map)))))
-	//	return (parsing(map));
 	printf("fin parsing\n");
 	return (data);
 }
