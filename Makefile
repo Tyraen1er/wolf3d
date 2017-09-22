@@ -21,7 +21,8 @@ OBJ_DIR			:=	./obj
 
 # files to compile
 FILE_LIST		:=	wolf.c	\
-					pars.c
+					pars.c	\
+					game.c
 
 OBJ_FILES		:= $(addprefix $(OBJ_DIR)/,$(FILE_LIST:.c=.o))
 

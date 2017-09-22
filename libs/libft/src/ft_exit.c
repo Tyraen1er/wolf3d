@@ -20,6 +20,8 @@ void	ft_exit(int error)
 		ft_putstr("error input data\n");
 	else if (error == 2)
 		ft_putstr("error allocation\n");
+	else if (error == 3)
+		ft_putstr("error mlx\n");
 	else
 		ft_putstr("error\n");
 	exit(3);

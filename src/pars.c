@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pars.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/22 07:54:46 by eferrand          #+#    #+#             */
+/*   Updated: 2017/09/22 07:58:06 by eferrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
 int		nb_nb_line(char *map)
@@ -7,7 +19,7 @@ int		nb_nb_line(char *map)
 
 	a = 0;
 	b = 0;
-	while(map[a] != '\n' && map[a])
+	while (map[a] != '\n' && map[a])
 	{
 		while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a])
 			++a;
@@ -43,7 +55,7 @@ int		checkmap(char *map)
 	a = -1;
 	while (map[++a] && !(b = 0))
 	{
-		while(map[a] != '\n' && map[a])
+		while (map[a] != '\n' && map[a])
 		{
 			while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a])
 				++a;
@@ -51,7 +63,6 @@ int		checkmap(char *map)
 				while (ft_isdigit(map[a]))
 					++a;
 		}
-		printf("c = %d b = %d\n", c, b);
 		if (b != c)
 			ft_exit(1);
 	}
@@ -60,32 +71,33 @@ int		checkmap(char *map)
 	return (b);
 }
 
-t_map load_data(int nbl, int nb_elem, char *map, int i)
+t_map	load_data(int nbl, int nb_elem, char *map, int i)
 {
-	t_map data;
-	int j;
-	int k;
+	t_map	data;
+	int		j;
+	int		k;
 
 	k = 0;
 	data.map = ft_memalloc(sizeof(float *) * nbl);
-	while(++i < nbl)
+	while (++i < nbl)
 	{
 		j = -1;
 		data.map[i] = ft_memalloc(sizeof(float) * nb_elem);
 		while (map[k] && !ft_isdigit(map[k]) && map[k] != 'X')
 			k++;
-		while(++j < nb_elem)
+		while (++j < nb_elem)
 		{
 			if (map[k] == 'X' && (data.player.x = j + 0.5))
 				data.player.y = i + 0.5;
 			data.map[i][j] = (float)ft_atoi(map + k);
 			while (ft_isdigit(map[k]))
 				++k;
-			while (map[++k] && !ft_isdigit(map[k]) && map[k] != '\n' && map[k] != 'X')
+			while (map[++k] && !ft_isdigit(map[k]) &&
+					map[k] != '\n' && map[k] != 'X')
 				;
 		}
 	}
-	return(data);
+	return (data);
 }
 
 t_map	loadfile(char *argv)
@@ -101,6 +113,5 @@ t_map	loadfile(char *argv)
 	nb_elem = checkmap(map);
 	nbl = nb_lines(map);
 	data = load_data(nbl, nb_elem, map, -1);
-	printf("fin parsing\n");
 	return (data);
 }
