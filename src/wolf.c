@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 08:03:40 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/22 08:15:09 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/23 20:01:25 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		ft_display(t_map map)
 	s_l = 0;
 	endian = 0;
 	if (!(mlx.init = mlx_init()) ||
-			!(mlx.win = mlx_new_window(mlx.init, WIDTH, HEIGHT, "mlx 42"))
+			!(mlx.win = mlx_new_window(mlx.init, WIDTH, HEIGHT, "wolf42"))
 			|| !(mlx.img[0].img = mlx_new_image(mlx.init, WIDTH, HEIGHT)) ||
 			!(mlx.img[0].addr =
 				mlx_get_data_addr(mlx.img[0].img, &(bpp), &(s_l), &(endian)))
@@ -52,8 +52,8 @@ int		ft_display(t_map map)
 		exit(3);
 	mlx_hook(mlx.win, 2, (1L << 0), &press_key, NULL);
 	mlx_hook(mlx.win, 6, (1L << 6), &mouse_event, NULL);
+	play(mlx, map);
 	mlx_loop(mlx.init);
-	play(mlx.img[0], mlx.img[1], map);
 	return (1);
 }
 

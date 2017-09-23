@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:46 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/22 07:58:06 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/23 23:02:03 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ t_map	loadfile(char *argv)
 	map = ft_readfile(fd);
 	nb_elem = checkmap(map);
 	nbl = nb_lines(map);
+	data.view = 0;
 	data = load_data(nbl, nb_elem, map, -1);
 	return (data);
 }
