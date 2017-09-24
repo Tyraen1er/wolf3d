@@ -22,11 +22,11 @@ int		press_key(int keycode, void *param)
 
 int		mouse_event(int x, int y, void *param)
 {
-	static int	posx = 0;
+	static int	pos[2] = {0, 0};
 
-	(void)x;
-	(void)y;
-	(void)posx;
+	if (x < 0 || y < 0 || WIDTH < x || HEIGHT < y)
+		return (0);
+	(void)pos;
 	(void)param;
 	return (0);
 }

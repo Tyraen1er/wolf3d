@@ -12,11 +12,31 @@
 
 #include "wolf.h"
 
-void	play(t_mlx game, t_map data)
+void	rotation(t_all *data, char sense, char change)
 {
-	minimap(game.img[2], data);
-	mlx_put_image_to_window(game.init, game.win, game.img[1].addr, 0, 0);
-	(void)game;
-	(void)data;
+	double			move;
+	static double	sensibility = 1;
+
+	if (change == '+' || change == '-')
+	{
+		sensibility *=  (change == '+') ? 1.1 : 0.9;
+		return ;
+	}
+	move = ((sense == '-') ? -0.0174533 : 0.0174533) * sensibility;
+	data->map.view = sinh(move) / cosh(move);
+	play(*data);
+}
+
+void	minimap(t_img mlx, t_map map)
+{
+	(void)mlx;
+	(void)map;
+}
+
+void	play(t_all all)
+{
+	minimap(all.mlx.img[1], all.map);
+	mlx_put_image_to_window(all.mlx.init, all.mlx.win, all.mlx.img[1].addr, 0, 0);
+	(void)all;
 	return ;
 }

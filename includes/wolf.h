@@ -14,6 +14,7 @@
 # define WOLF_H
 # include "libft.h"
 # include "mlx.h"
+# include <math.h>
 # include <pthread.h>
 
 # define WIDTH 1280
@@ -37,20 +38,24 @@ typedef struct	s_mlx
 	t_img		img[2];
 }				t_mlx;
 
-typedef struct	s_coord
-{
-	float		x;
-	float		y;
-}				t_coord;
+/*
+** view = coef directeur
+*/
 
 typedef struct	s_map
 {
-	float		**map;
-	t_coord		player;
-	int			viewdeg;
+	double		**map;
+	t_point		player;
+	double		view;
 }				t_map;
 
-void			play(t_mlx game, t_map data);
+typedef struct	s_all
+{
+	t_mlx		mlx;
+	t_map		map;
+}				t_all;
+
+void			play(t_all data);
 int				checkmap(char *map);
 int				nb_lines(char *map);
 int				nb_nb_line(char *map);
