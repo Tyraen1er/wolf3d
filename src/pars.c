@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:46 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/23 23:02:03 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/25 10:31:38 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,18 @@ t_map	load_data(int nbl, int nb_elem, char *map, int i)
 	int		k;
 
 	k = 0;
-	data.map = ft_memalloc(sizeof(float *) * nbl);
+	data.map = ft_memalloc(sizeof(double *) * nbl);
 	while (++i < nbl)
 	{
 		j = -1;
-		data.map[i] = ft_memalloc(sizeof(float) * nb_elem);
+		data.map[i] = ft_memalloc(sizeof(double) * nb_elem);
 		while (map[k] && !ft_isdigit(map[k]) && map[k] != 'X')
 			k++;
 		while (++j < nb_elem)
 		{
 			if (map[k] == 'X' && (data.player.x = j + 0.5))
 				data.player.y = i + 0.5;
-			data.map[i][j] = (float)ft_atoi(map + k);
+			data.map[i][j] = (double)ft_atoi(map + k);
 			while (ft_isdigit(map[k]))
 				++k;
 			while (map[++k] && !ft_isdigit(map[k]) &&
@@ -111,8 +111,9 @@ t_map	loadfile(char *argv)
 	fd = open(argv, O_RDONLY);
 	map = ft_readfile(fd);
 	nb_elem = checkmap(map);
+	printf("%d\n", nb_elem);
 	nbl = nb_lines(map);
-	data.view = 0;
+	data.view = (t_point){0, 0};
 	data = load_data(nbl, nb_elem, map, -1);
 	return (data);
 }

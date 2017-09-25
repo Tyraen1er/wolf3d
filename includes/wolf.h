@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 08:21:53 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/23 23:19:30 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/25 10:31:38 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct	s_map
 {
 	double		**map;
 	t_point		player;
-	double		view;
+	t_point		view;
 }				t_map;
 
 typedef struct	s_all

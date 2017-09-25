@@ -12,6 +12,13 @@
 
 #include "wolf.h"
 
+static int  hook_close(t_mlx mlx)
+{
+	(void)mlx;
+	exit(3);
+	return (0);
+}
+
 int		press_key(int keycode, void *param)
 {
 	(void)param;
@@ -34,6 +41,7 @@ int		mouse_event(int x, int y, void *param)
 int		ft_display(t_map map)
 {
 	t_mlx	mlx;
+	t_all	data;
 	int		bpp;
 	int		s_l;
 	int		endian;
@@ -52,7 +60,9 @@ int		ft_display(t_map map)
 		exit(3);
 	mlx_hook(mlx.win, 2, (1L << 0), &press_key, NULL);
 	mlx_hook(mlx.win, 6, (1L << 6), &mouse_event, NULL);
-	play(mlx, map);
+	mlx_hook(mlx.win, 17, 1L << 0, hook_close, NULL);
+	data = (t_all){mlx, map};
+	play(data);
 	mlx_loop(mlx.init);
 	return (1);
 }
