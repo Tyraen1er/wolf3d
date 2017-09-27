@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/15 14:20:05 by eferrand          #+#    #+#             */
-/*   Updated: 2017/06/15 14:20:47 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/27 17:22:52 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	ft_exit(int error)
 		ft_putstr("error allocation\n");
 	else if (error == 3)
 		ft_putstr("error mlx\n");
+	else if (error == 4)
+		ft_putstr("error multi-threading\n");
 	else
 		ft_putstr("error\n");
 	exit(3);

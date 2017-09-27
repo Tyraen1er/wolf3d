@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/22 22:21:24 by eferrand          #+#    #+#             */
-/*   Updated: 2017/06/24 22:32:41 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/27 20:15:57 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,20 @@
 # include <stdio.h>
 
 
+typedef struct	s_img
+{
+	void		*addr;
+	char		*img;
+}				t_img;
+
+/*
+**	typedef struct	s_mlx
+**	{
+**		void		*init;
+**		void		*win;
+**		t_img		img;
+**	}				t_mlx;
+*/
 
 typedef struct					s_fdline
 {

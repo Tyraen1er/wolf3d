@@ -33,14 +33,14 @@ int		nb_nb_line(char *map)
 int		nb_lines(char *map)
 {
 	int	a;
-	int	nbl;
+	int	limity;
 
 	a = -1;
-	nbl = 0;
+	limity = 0;
 	while (map[++a])
 		if (map[a] == '\n')
-			++nbl;
-	return (nbl);
+			++limity;
+	return (limity);
 }
 
 int		checkmap(char *map)
@@ -71,21 +71,22 @@ int		checkmap(char *map)
 	return (b);
 }
 
-t_map	load_data(int nbl, int nb_elem, char *map, int i)
+void	load_data(t_map data, char *map)
 {
-	t_map	data;
+	int		i;
 	int		j;
 	int		k;
 
+	i = -1;
 	k = 0;
-	data.map = ft_memalloc(sizeof(double *) * nbl);
-	while (++i < nbl)
+	data.map = ft_memalloc(sizeof(double *) * data.limity);
+	while (++i < data.limity)
 	{
 		j = -1;
-		data.map[i] = ft_memalloc(sizeof(double) * nb_elem);
+		data.map[i] = ft_memalloc(sizeof(double) * data.limitx);
 		while (map[k] && !ft_isdigit(map[k]) && map[k] != 'X')
 			k++;
-		while (++j < nb_elem)
+		while (++j < data.limitx)
 		{
 			if (map[k] == 'X' && (data.player.x = j + 0.5))
 				data.player.y = i + 0.5;
@@ -97,23 +98,21 @@ t_map	load_data(int nbl, int nb_elem, char *map, int i)
 				;
 		}
 	}
-	return (data);
 }
 
 t_map	loadfile(char *argv)
 {
 	int		fd;
-	int		nb_elem;
-	int		nbl;
 	char	*map;
 	t_map	data;
 
 	fd = open(argv, O_RDONLY);
 	map = ft_readfile(fd);
-	nb_elem = checkmap(map);
-	printf("%d\n", nb_elem);
-	nbl = nb_lines(map);
+	data.limitx = checkmap(map);
+	data.limity = nb_lines(map);
 	data.view = (t_point){0, 0};
-	data = load_data(nbl, nb_elem, map, -1);
+	if (!data.limitx && !data.limity)
+		ft_exit(1);
+	load_data(data, map);
 	return (data);
 }
