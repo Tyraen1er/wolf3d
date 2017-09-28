@@ -20,8 +20,8 @@ LIB_DIR			:=	./libs
 OBJ_DIR			:=	./obj
 
 # files to compile
-FILE_LIST		:=	wolf.c	\
-					pars.c	\
+FILE_LIST		:=	display.c	\
+					pars.c		\
 					game.c
 
 OBJ_FILES		:= $(addprefix $(OBJ_DIR)/,$(FILE_LIST:.c=.o))
@@ -37,7 +37,7 @@ LIB_MLX_LINK	:=	-L $(LIB_MLX) -l mlx -framework OpenGL -framework Appkit
 
 # our project
 INCLUDES		:=	$(LIB_FT_INC) $(LIB_MLX_INC) -I$(INC_DIR)
-LINK			:=	$(LIB_FT_LINK) $(LIB_MLX_LINK) -fsanitize=address
+LINK			:=	$(LIB_FT_LINK) $(LIB_MLX_LINK) -fsanitize=address -O2
 
 # compiler and flags
 CC				:=	gcc

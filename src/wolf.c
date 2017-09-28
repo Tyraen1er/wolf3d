@@ -55,19 +55,17 @@ int		ft_display(t_map map)
 	bpp = 0;
 	s_l = 0;
 	endian = 0;
+
 	if (!(mlx.init = mlx_init()) ||
 			!(mlx.win = mlx_new_window(mlx.init, WIDTH, HEIGHT, "wolf42"))
-			|| !(mlx.img[0].img = mlx_new_image(mlx.init, WIDTH, HEIGHT)) ||
-			!(mlx.img[0].addr =
-				mlx_get_data_addr(mlx.img[0].img, &(bpp), &(s_l), &(endian)))
-			|| !(mlx.img[1].img = mlx_new_image(mlx.init, WIDTH_M, HEIGHT_M)) ||
-			!(mlx.img[1].addr =
-				mlx_get_data_addr(mlx.img[1].img, &(bpp), &(s_l), &(endian))))
+			|| !(mlx.img.img = mlx_new_image(mlx.init, WIDTH, HEIGHT)) ||
+			!(mlx.img.addr =
+				mlx_get_data_addr(mlx.img.img, &(bpp), &(s_l), &(endian))))
 		exit(3);
 	mlx_hook(mlx.win, 2, (1L << 0), &press_key, NULL);
 	mlx_hook(mlx.win, 6, (1L << 6), &mouse_event, NULL);
 	mlx_hook(mlx.win, 17, 1L << 0, hook_close, NULL);
-	data = (t_all){mlx, map};
+	data = (t_all){mlx, map, (t_tmp){0, 0}};
 	play(&data);
 	mlx_loop(mlx.init);
 	return (1);

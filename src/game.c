@@ -12,26 +12,69 @@
 
 #include "wolf.h"
 
-// probablement faux !
 
-void	rotation(t_all *data, char sense, char change)
+void	rotation(t_all *data, char sense)
 {
 	double			move;
-	static double	sensibility = 1;
 
-//	rotation d un vecteur (0 ; 1)
-
-	if (change == '+' || change == '-')
-	{
-		sensibility *=  (change == '+') ? 1.1 : 0.9;
-		return ;
-	}
-	move = ((sense == '-') ? -0.0174533 : 0.0174533) * sensibility;
+	move = ((sense == '-') ? -0.0174533 : 0.0174533);
 	data->map.view = (t_point){cosh(move), sinh(move)};
 	play(data);
 }
 
-double	raycasting(t_all *dta)
+void	bresenham(int x, int y, int *xymax, char *img)
+{
+	int	*d;
+	int	err[2];
+	int	*s;
+	int	ret[2];
+
+	printf("x=%d\ny=%d\n", x, y);
+	ret[0] = 23;
+	d = (int[2]){abs(xymax[0] - x), abs(xymax[1] - y)};
+	s = (int[2]){(x < xymax[0]) ? 1 : -1, (y < xymax[1]) ? 1 : -1};
+	err[0] = ((d[0] > d[1]) ? d[0] : -d[1]) / 2;
+
+int i;
+ i = 0;
+while (++i)
+	printf("%c | %d\n", img[i], i);
+	printf("img = %c\n", img[x + y * WIDTH]);
+	printf("x = %d y = %d\n", x, y);
+	printf("xmqx = %d ymax[0] = %d\n", xymax[0], xymax[1]);
+	sleep(1);
+	while (1)
+	{
+		if (x - 1 + y * WIDTH < (WIDTH * HEIGHT))
+		//((int*)img)[x - 1 + y * WIDTH] = 0xFFFFFF;
+		if (x == xymax[0] && y == xymax[1])
+			break;
+		err[1] = err[0];
+		if (err[1] >-d[0])
+		{
+			err[0] -= d[1];
+			x += s[0];
+		}
+		if (err[1] < d[1])
+		{
+			err[0] += d[0];
+			y += s[1];
+		}
+	}
+}
+
+void	trace(t_all *dta, double length)
+{
+	int	height;
+
+	height = WALL * length / 2;
+	if (HEIGHT < height)
+		height = HEIGHT - 1;
+	bresenham(dta->tmp.pixelx + 1, HEIGHT / 2 - height, (int[2]){dta->tmp.pixelx + 1, HEIGHT / 2 + height}, dta->mlx.img.img);
+}
+
+
+void	raycasting(t_all *dta)
 {
 	double	length;
 	double	dxy[2];
@@ -50,64 +93,21 @@ double	raycasting(t_all *dta)
 		xy[0] += dxy[0];
 		xy[1] += dxy[1];
 	}
-	return (sqrt(pow(dta->map.player.x - xy[0], 2) + pow(dta->map.player.y - xy[1], 2)));
+	trace(dta, sqrt(pow(dta->map.player.x - xy[0], 2) + pow(dta->map.player.y - xy[1], 2)));
 }
 
-void	minimap(t_all *data, int img)
+void	play(t_all *data)
 {
-	int		a;
-	int		b;
-	int		offset;
-	t_quad	plan;
-	t_quad	win;
+	double	fov;
 
-	if ((offset = (data->map.limitx / WIDTH_M) / 2) < 2)
-		return ;
-	plan = (t_quad){.tl = {0, 0}, .br = {data->map.limitx, data->map.limity}};
-	win = (t_quad){.tl = {1, 1}, .br = {WIDTH_M, HEIGHT_M}};
-	a = -1;
-	while (++a < data->map.limity)
+	data->tmp.pixelx = 0;
+	while (data->tmp.pixelx < WIDTH)
 	{
-		b = -1;
-		while (++b < data->map.limitx)
-			if (map[a][b])
-			{
-				ft_point_change_quad((t_point){0, 0}, plan, win);
-			}
+		fov = (data->tmp.pixelx + 1) * WIDTH / 160;
+		data->map.view = (t_point){cosh(0.0174533 * fov), sinh(0.0174533 * fov)};
+		raycasting(data);
 	}
-}
-
-/*
-void	minimap(t_all *data, int img)
-{
-	int			a;
-	int			b;
-	double		scalex;
-	double		scaley;
-	pthread_t	th[NB_THREADS];
-
-	b = -1;
-	scalex = 120 / WIDTH;
-	scaley = 120 / HEIGHT;
-	(void)img;
-	while (++b < WIDTH_M)
-	{
-		a = -1;
-		while (++a < NB_THREADS)
-			if (pthread_create(&th[a], NULL, fillingmini, (void*)data))
-				ft_exit(4);
-		a = -1;
-		while (++a < NB_THREADS)
-			if (pthread_join(th[a], NULL))
-				ft_exit(4);
-	}
-}
-*/
-
-void	play(t_all *all)
-{
-	minimap(all, 1);
-	mlx_put_image_to_window(all->mlx.init, all->mlx.win, all->mlx.img[1].addr, 0, 0);
-	(void)all;
+	mlx_put_image_to_window(data->mlx.init, data->mlx.win, data->mlx.img.addr, 0, 0);
+	(void)data;
 	return ;
 }

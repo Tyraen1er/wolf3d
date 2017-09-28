@@ -20,39 +20,28 @@
 # define NB_THREADS 16
 # define WIDTH 1280
 # define HEIGHT 720
-# define WIDTH_M 100
-# define HEIGHT_M 100
-
-
-/*
-**	t_img[2] n est pas transposable a d autres codes. Anti norminette qui
-**	fait un warning contre (t_img[2]){};
-*/
-
-typedef struct	s_mlx
-{
-	void		*init;
-	void		*win;
-	t_img		img[2];
-}				t_mlx;
-
-/*
-** view = coef directeur
-*/
+# define WALL 600
 
 typedef struct	s_map
 {
-	int 		limitx;
-	int 		limity;
-	double		**map;
-	t_point		player;
-	t_point		view;
+	int 		limitx; //ok
+	int 		limity; //ok
+	double		**map; //ok
+	t_point		player; //ok
+	t_point		view; //nope
 }				t_map;
+
+typedef struct	s_tmp
+{
+	int			pixelx;
+	double		fov;
+}				t_tmp;
 
 typedef struct	s_all
 {
 	t_mlx		mlx;
 	t_map		map;
+	t_tmp		tmp;;
 }				t_all;
 
 void			play(t_all *data);

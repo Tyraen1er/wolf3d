@@ -27,14 +27,12 @@ typedef struct	s_img
 	char		*img;
 }				t_img;
 
-/*
-**	typedef struct	s_mlx
-**	{
-**		void		*init;
-**		void		*win;
-**		t_img		img;
-**	}				t_mlx;
-*/
+typedef struct	s_mlx
+{
+	void		*init;
+	void		*win;
+	t_img		img;
+}				t_mlx;
 
 typedef struct					s_fdline
 {
