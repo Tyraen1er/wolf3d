@@ -32,21 +32,25 @@ void	fill_img(int x, int *height, int *color, char *img)
 	int	b;
 
 	a = -1;
-	b = 0;
-	while (++a < HEIGHT)
-	{
+	b = -1;
+	while (++a < HEIGHT && ++b < 3)
 		while (a < height[b])
 			img[x + a * height * WIDTH] = color[b];
-		if (a == height[b])
-			++b;
-	}
 }
 
 void	wall_size(t_all dta, double length)
 {
-	int	height;
+	int	height[2];
+	int	color[2];
 
-	height = WALL * length / 2;
+//	couleur du plafond
+	color[0] = 0X808080;
+// limite haute du mur en y
+	height[0] = WALL * length / 2;
+// limite basse du mur en y en fonction au coté dont il fait face 0xF0000 0xFF00 0xFF 0xFFFF
+	height[1] = WALL * length / 2;
+//	couleur du sol
+	color[2] = 0X663300;
 	if (HEIGHT < height)
 		height = HEIGHT - 1;
 }
