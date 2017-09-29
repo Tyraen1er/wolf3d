@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 08:21:53 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/27 20:15:57 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/29 14:21:55 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ typedef struct	s_tmp
 {
 	int			pixelx;
 	double		fov;
+	double		camerax;
+	double		rayposx;
+	double		rayposy;
+	double		raydirx;
+	double		raydiry;
 }				t_tmp;
 
 typedef struct	s_all
@@ -44,7 +49,8 @@ typedef struct	s_all
 	t_tmp		tmp;;
 }				t_all;
 
-void			play(t_all *data);
+void			display(t_all *data);
+void			play(t_all data);
 void			load_data(t_map data, char *map);
 int				checkmap(char *map);
 int				nb_lines(char *map);

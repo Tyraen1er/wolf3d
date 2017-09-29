@@ -23,6 +23,7 @@ void    raycasting(t_all *dta)
 		xy[0] += dxy[0];
 		xy[1] += dxy[1];
 	}
+	printf("\nlength = %f\ndxy[0] = %f\ndxy[1] = %f\nxy[0] = %f\nxy[1] = %f\nlimitx = %d\nlimity = %d\n", length, dxy[0], dxy[1], xy[0], xy[1], dta->map.limitx, dta->map.limity);
 	printf("%f\n", sqrt(pow(dta->map.player.x - xy[0], 2) + pow(dta->map.player.y - xy[1], 2)));
 }
 
@@ -48,8 +49,8 @@ int main()
 	data.map.limity = 1;
 	carte[0] = suite;
 	data.map.map = carte;
-	data.map.player.x = 1.0f;
-	data.map.player.y = 1.0f;
+	data.map.player.x = 0.5f;
+	data.map.player.y = 0.5f;
 	raycasting(&data);
 	return (0);
 }
