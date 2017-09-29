@@ -29,20 +29,6 @@ typedef struct					s_mlx
 	t_img						img;
 }								t_mlx;
 
-typedef	struct					s_list
-{
-	void						*content;
-	size_t						content_size;
-	struct s_list				*next;
-}								t_list;
-
-typedef struct					s_btree
-{
-	struct s_btree				*left;
-	struct s_btree				*right;
-	void						*item;
-}								t_btree;
-
 typedef struct					s_point
 {
 	double						x;
@@ -54,37 +40,6 @@ typedef struct					s_quad
 	t_point						tl;
 	t_point						br;
 }								t_quad;
-
-typedef struct					s_header_file_bmp
-{
-	short						bf_type;
-	int							bf_size;
-	int							reserved;
-	int							bf_offset;
-}								t_header_file_bmp;
-
-typedef struct					s_info_bmp
-{
-	int							info_size;
-	int							width;
-	int							height;
-	short						nb_planes;
-	short						bits_per_pixel;
-	int							compression;
-	int							pic_size;
-	int							h_pixel_per_meter;
-	int							v_pixel_per_meter;
-	int							nb_color_used;
-	int							nb_color_important;
-}								t_info_bmp;
-
-typedef struct					s_bmp
-{
-	t_header_file_bmp			header;
-	t_info_bmp					info;
-	unsigned int				*palette;
-	unsigned char				*picture;
-}								t_bmp;
 
 typedef struct	s_map
 {

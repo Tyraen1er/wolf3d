@@ -13,10 +13,6 @@
 #include "wolf.h"
 
 
-void	rotation(t_all *data, char sense)
-{
-}
-
 /*
 **	int height = point de separation des couleurs
 **
@@ -41,15 +37,16 @@ void	wall_size(t_all dta, double length)
 //	couleur du plafond
 	color[0] = 0X808080;
 // limite haute du mur en y
-	height[0] = WALL * length / 2;
+	height[0] = (WALL * length) / 2;
 // limite basse du mur en y en fonction au coté dont il fait face 0xF0000 0xFF00 0xFF 0xFFFF
-	height[1] = WALL * length / 2;
+//	if (orientation mur = couleur)
+	color[1] = 0xFF;
+	height[1] = (WALL * length) / 2;
 //	couleur du sol
 	color[2] = 0X663300;
 	if (HEIGHT < height)
 		height = HEIGHT - 1;
 }
-
 
 void	raycasting(t_all dta)
 {
