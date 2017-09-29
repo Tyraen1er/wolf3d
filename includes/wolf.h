@@ -24,11 +24,11 @@
 
 typedef struct	s_map
 {
-	int 		limitx; //ok
-	int 		limity; //ok
-	double		**map; //ok
-	t_point		player; //ok
-	t_point		view; //nope
+	int 		limitx;
+	int 		limity;
+	double		**map;
+	t_point		player;
+	t_point		view;
 }				t_map;
 
 typedef struct	s_tmp

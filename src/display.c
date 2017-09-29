@@ -1,7 +1,27 @@
 int		press_key(int keycode, t_all *data)
 {
+	double			view;
+	static int		deg = 0;
+
 	if (keycode == 53)
 		exit(3);
+	if (keycode == 123 || keycode == 124)
+	{
+		deg += (keycode == 123) ? 1 : 1;
+		deg = (abs(deg) == 36000) ? 0 : deg;
+		view = ((keycode == 124) ? -0.0174533 : 0.0174533) * deg;
+		data->map.view = (t_point){cosh(view), sinh(view)};
+	}
+	if (keycode == 125)
+	{
+		data->map.player.x -= data->map.view.x;
+		data->map.player.y -= data->map.view.y;
+	}
+	if (keycode == 126)
+	{
+		data->map.player.x += data->map.view.x;
+		data->map.player.y += data->map.view.y;
+	}
 	play(data);
 	return (0);
 }
@@ -16,10 +36,8 @@ static int  hook_close(t_mlx mlx)
 void	init(t_all *data, int vision, int move)
 {
 	static t_point view = {0, 1};
-	static t_point player;
 
-	data->map.view = ;
-	data->map.player = player;
+	data->map.view = view;
 	play(*data);
 }
 

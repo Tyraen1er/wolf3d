@@ -15,11 +15,6 @@
 
 void	rotation(t_all *data, char sense)
 {
-	double			move;
-
-	move = ((sense == '-') ? -0.0174533 : 0.0174533);
-	data->map.view = (t_point){cosh(move), sinh(move)};
-	play(data);
 }
 
 /*
