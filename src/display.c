@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/29 11:52:17 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/29 14:22:27 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/29 18:04:38 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	display(t_all *data)
 	endian = 0;
 	if (!(mlx.init = mlx_init()) ||
 		!(mlx.win = mlx_new_window(mlx.init, WIDTH, HEIGHT, "wolf42"))
-		|| !(mlx.image.img = mlx_new_image(mlx.init, WIDTH, HEIGHT)) ||
-		!(mlx.image.addr =
-		mlx_get_data_addr(mlx.image.img, &(bpp), &(s_l), &(endian))))
+		|| !(mlx.image.addr = mlx_new_image(mlx.init, WIDTH, HEIGHT)) ||
+		!(mlx.image.img =
+		mlx_get_data_addr(mlx.image.addr, &(bpp), &(s_l), &(endian))))
 		exit(3);
 	mlx_hook(mlx.win, 2, (1L << 0), press_key, data);
 	mlx_hook(mlx.win, 17, 1L << 0, hook_close, NULL);
@@ -76,6 +76,9 @@ int main(int argc, char **argv)
 	t_all data;
 
 	data.map = (argc == 2) ? loadfile(argv[1]) : loadfile("creationsample");
+//	printf("debut programme\n");
+//	printf("%f\n", data.map.map[0][0]);
+//	printf("debut programme2\n");
 	display(&data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 08:21:53 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/29 14:21:55 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/29 16:37:51 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # include "libft.h"
 # include "mlx.h"
 # include <math.h>
-# include <pthread.h>
 
 # define NB_THREADS 16
 # define WIDTH 1280
@@ -51,7 +50,7 @@ typedef struct	s_all
 
 void			display(t_all *data);
 void			play(t_all data);
-void			load_data(t_map data, char *map);
+void			load_data(t_map *data, char *map);
 int				checkmap(char *map);
 int				nb_lines(char *map);
 int				nb_nb_line(char *map);

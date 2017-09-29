@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:38 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/29 14:51:09 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/29 19:15:22 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,40 +15,46 @@
 
 /*
  **	int height = point de separation des couleurs
- **
- */
-void	fill_img(int x, int *height, int *color, char *img)
+*/
+void	fill_img(int x, int *height, int *color, int *img)
 {
-	int	a;
-	int	b;
+	int		a;
 
-	a = -1;
-	b = -1;
-	while (++a < HEIGHT && ++b < 3)
-		while (a < height[b])
-			img[x + a * height[b] * WIDTH] = color[b];
+	a = 0;
+	while (a < height[0] - 1)
+	{
+		img[a * WIDTH + x] = color[0];
+		++a;
+	}
+	while (a < height[1] - 1)
+	{
+		img[a * WIDTH + x] = color[1];
+		++a;
+	}
+	while (a < HEIGHT - 1)
+	{
+		img[a * WIDTH + x] = color[2];
+		++a;
+	}
 }
 
 // a refaire
 void	wall_size(t_all dta, double length, int side)
 {
 	int	height[2];
-	int	color[2];
+	int	color[3];
 
 	//	couleur du plafond
 	color[0] = 0X808080;
 	// limite haute du mur en y
-	height[0] = (int)(WALL * length) / 2;
-	color[0] = (side) ? 0xFF0000 : 0xFF;
-	height[0] = (int)(WALL * length) / 2;
+	height[0] = HEIGHT / 2 - length / 2;
+	color[1] = (side) ? 0xFF0000 : 0xFF;
+	height[1] = HEIGHT / 2 + length / 2;
 	//	couleur du sol
-	color[1] = 0X663300;
-	if (HEIGHT < height[1] - height[0])
-	{
-		height[0] = 0;
+	color[2] = 0X663300;
+	if (HEIGHT < height[1])
 		height[1] = HEIGHT - 1;
-	}
-	fill_img(dta.tmp.pixelx, height, color, dta.mlx.image.img);
+	fill_img(dta.tmp.pixelx, height, color, (int*)dta.mlx.image.img);
 }
 
 void	raycasting(t_all data)
@@ -57,13 +63,12 @@ void	raycasting(t_all data)
 	double sidedistxy[2];
 	double deltadistxy[2];
 	int	stepxy[2];
-	int	hit_side[2];
+	int	side;
 
 	mapxy[0] = (int)(data.tmp.rayposx);
 	mapxy[1] = (int)(data.tmp.rayposy);
 	deltadistxy[0] = sqrt(1 + (data.tmp.raydiry * data.tmp.raydiry) / (data.tmp.raydirx * data.tmp.raydirx));
 	deltadistxy[1] = sqrt(1 + (data.tmp.raydirx * data.tmp.raydirx) / (data.tmp.raydiry * data.tmp.raydiry));
-	hit_side[0] = 0;
 	if (data.tmp.raydirx < 0)
 	{
 		stepxy[0] = -1;
@@ -84,57 +89,39 @@ void	raycasting(t_all data)
 		stepxy[1] = 1;
 		sidedistxy[1] = (mapxy[1] + 1.0 - data.tmp.rayposy) * deltadistxy[1];
 	}
-	while (hit_side[0] == 0)
+	printf("salut mec ça va tu vas bien ?\n");
+	while (1)
 	{
 		if (sidedistxy[0] < sidedistxy[1])
 		{
 			sidedistxy[0] += deltadistxy[0];
 			mapxy[0] += stepxy[0];
-			hit_side[1] = 0;
+			side = 0;
 		}
 		else
 		{
 			sidedistxy[1] += deltadistxy[1];
 			mapxy[1] += stepxy[1];
-			hit_side[1] = 1;
+			side = 1;
 		}
 		printf("map[%d][%d]\n", mapxy[0], mapxy[1]);
-		if (data.map.map[mapxy[0]][mapxy[1]])
-			hit_side[0] = 1;
+		printf("== %f\n", data.map.map[mapxy[1]][mapxy[0]]);
+		if (data.map.map[mapxy[1]][mapxy[0]] || mapxy[1] == data.map.limity || mapxy[0] == data.map.limitx)
+		{
+			printf("on se presente ? Mais non tu nous connais !\n");
+			if (side == 0)
+				wall_size(data, (mapxy[0] - data.tmp.rayposx + (1 - stepxy[0]) / 2) / data.tmp.raydirx, side);
+			else
+				wall_size(data, (mapxy[1] - data.tmp.rayposy + (1 - stepxy[1]) / 2) / data.tmp.raydiry, side);
+			break ;
+		}
 	}
 }
-
-/*
-   void	raycasting(t_all dta)
-   {
-   double	length;
-   double	dxy[2];
-   double	xy[2];
-
-   length = fabs(dta.map.view.y - dta.map.player.x) <= fabs(dta.map.view.x - dta.map.player.x)
-   ? fabs(dta.map.view.x - dta.map.player.x) : fabs(dta.map.view.y - dta.map.player.x);
-   dxy[0] = (dta.map.view.x - dta.map.player.x) / length;
-   dxy[1] = (dta.map.view.y - dta.map.player.y) / length;
-   xy[0] = dta.map.player.x;
-   xy[1] = dta.map.player.y;
-   printf("\nlength = %f\ndxy[0] = %f\ndxy[1] = %f\nxy[0] = %f\nxy[1] = %f\nlimitx = %d\nlimity = %d\nwhile (0 < xy[0] && xy[0] < dta.map.limitx && 0 < xy[1] && xy[1] < dta.map.limity)\n", length, dxy[0], dxy[1], xy[0], xy[1], dta.map.limitx, dta.map.limity);
-   while (0 < xy[0] && xy[0] < dta.map.limitx && 0 < xy[1] && xy[1] < dta.map.limity)
-   {
-   if (dta.map.map[(int)xy[0]] || dta.map.map[(int)xy[1]])
-   break ;
-   xy[0] += dxy[0];
-   xy[1] += dxy[1];
-   }
-   wall_size(dta, sqrt(pow(dta.map.player.x - xy[0], 2) + pow(dta.map.player.y - xy[1], 2)));
-   }
-   */
 
 void	play(t_all data)
 {
 	double	fov;
 
-	printf("%f\n", data.map.map[0][0]);
-	printf("je l ai passé\n");
 	data.tmp.pixelx = 0;
 	while (data.tmp.pixelx < WIDTH)
 	{
@@ -146,8 +133,11 @@ void	play(t_all data)
 		data.tmp.rayposy = data.map.player.y;
 		data.tmp.raydirx = data.map.view.x;
 		data.tmp.raydiry = data.map.view.y;
+		printf("data.tmp.pixelx = %d\nvecteur(%f\t%f)\n", data.tmp.pixelx, data.map.view.x, data.map.view.y);
 		raycasting(data);
+		++data.tmp.pixelx;
 	}
+	printf("Hello World !\n");
 	mlx_put_image_to_window(data.mlx.init, data.mlx.win, data.mlx.image.addr, 0, 0);
 	(void)data;
 	return ;

@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:46 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/25 10:31:38 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/29 18:54:43 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		nb_nb_line(char *map)
 	b = 0;
 	while (map[a] != '\n' && map[a])
 	{
-		while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a])
+		while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a] && map[a] != '\n')
 			++a;
 		if ((ft_isdigit(map[a]) || (map[a] == 'X' && ++a)) && ++b)
 			while (ft_isdigit(map[a]))
@@ -57,7 +57,7 @@ int		checkmap(char *map)
 	{
 		while (map[a] != '\n' && map[a])
 		{
-			while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a])
+			while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a] && map[a] != '\n')
 				++a;
 			if ((ft_isdigit(map[a]) || (map[a] == 'X' && ++x && ++a)) && ++b)
 				while (ft_isdigit(map[a]))
@@ -71,7 +71,7 @@ int		checkmap(char *map)
 	return (b);
 }
 
-void	load_data(t_map data, char *map)
+void	load_data(t_map *data, char *map)
 {
 	int		i;
 	int		j;
@@ -79,18 +79,18 @@ void	load_data(t_map data, char *map)
 
 	i = -1;
 	k = 0;
-	data.map = ft_memalloc(sizeof(double *) * data.limity);
-	while (++i < data.limity)
+	data->map = ft_memalloc(sizeof(double *) * data->limity);
+	while (++i < data->limity)
 	{
 		j = -1;
-		data.map[i] = ft_memalloc(sizeof(double) * data.limitx);
+		data->map[i] = ft_memalloc(sizeof(double) * data->limitx);
 		while (map[k] && !ft_isdigit(map[k]) && map[k] != 'X')
 			k++;
-		while (++j < data.limitx)
+		while (++j < data->limitx)
 		{
-			if (map[k] == 'X' && (data.player.x = j + 0.5))
-				data.player.y = i + 0.5;
-			data.map[i][j] = (double)ft_atoi(map + k);
+			if (map[k] == 'X' && (data->player.x = j + 0.5))
+				data->player.y = i + 0.5;
+			data->map[i][j] = (double)ft_atoi(map + k);
 			while (ft_isdigit(map[k]))
 				++k;
 			while (map[++k] && !ft_isdigit(map[k]) &&
@@ -113,6 +113,6 @@ t_map	loadfile(char *argv)
 	data.view = (t_point){0, 0};
 	if (!data.limitx && !data.limity)
 		ft_exit(1);
-	load_data(data, map);
+	load_data(&data, map);
 	return (data);
 }
