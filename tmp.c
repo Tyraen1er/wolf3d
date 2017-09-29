@@ -1,0 +1,52 @@
+#include "wolf.h"
+#include <math.h>
+
+void    raycasting(t_all dta)
+{
+	double  length;
+	double  dxy[2];
+	double  xy[2];
+
+	length = fabs(dta.map.view.y - dta.map.player.x) <= fabs(dta.map.view.x - dta.map.player.x)
+		? fabs(dta.map.view.x - dta.map.player.x) : fabs(dta.map.view.y - dta.map.player.x);
+	dxy[0] = (dta.map.view.x - dta.map.player.x) / length;
+	dxy[1] = (dta.map.view.y - dta.map.player.y) / length;
+	xy[0] = dta.map.player.x;
+	xy[1] = dta.map.player.y;
+	while (0 < xy[0] && xy[0] < dta.map.limitx && 0 < xy[1] && xy[1] < dta.map.limity)
+	{
+		if (dta.map.map[(int)xy[0]] || dta.map.map[(int)xy[1]])
+			break ;
+		xy[0] += dxy[0];
+		xy[1] += dxy[1];
+	}
+	printf("%f\n", sqrt(pow(dta.map.player.x - xy[0], 2) + pow(dta.map.player.y - xy[1], 2)));
+}
+
+int main()
+{
+	t_all	data;
+	double	*carte[1];
+	double	suite[10];
+
+	carte[0][0] = 0;
+	carte[0][1] = 0;
+	carte[0][2] = 0;
+	carte[0][3] = 0;
+	carte[0][4] = 0;
+	carte[0][5] = 0;
+	carte[0][6] = 0;
+	carte[0][7] = 0;
+	carte[0][8] = 0;
+	carte[0][9] = 1;
+	data.map.view.y = 0;
+	data.map.view.x = 1;
+	data.map.limitx = 10;
+	data.map.limity = 1;
+	carte[0] = suite;
+	data.map.map = carte;
+	data.map.player.x = 1;
+	data.map.player.y = 1;
+	raycasting(data);
+	return (0);
+}
