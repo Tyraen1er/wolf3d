@@ -16,18 +16,18 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-typedef struct	s_img
+typedef struct					s_img
 {
-	void		*addr;
-	char		*img;
-}				t_img;
+	void						*addr;
+	char						*img;
+}								t_img;
 
-typedef struct	s_mlx
+typedef struct					s_mlx
 {
-	void		*init;
-	void		*win;
-	t_img		img;
-}				t_mlx;
+	void						*init;
+	void						*win;
+	t_img						img;
+}								t_mlx;
 
 typedef	struct					s_list
 {
