@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:38 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/30 02:15:20 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/30 14:38:21 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,20 @@ void	fill_img(int x, int *height, int *color, int *img)
 // a refaire
 void	wall_size(t_all dta, double length, int side)
 {
+	int	hauteur_mur;
 	int	height[2];
 	int	color[3];
 
+	hauteur_mur = WALL / ((cos(PI2 * (fabs(side + 90 - a) / 360)) * length)
 	//	couleur du plafond
 	color[0] = 0X808080;
 	// limite haute du mur en y
-	height[0] = HEIGHT / 2 - length * 2;
+	height[0] =  ((1 / length) * WALL + HEIGHT / 2);
+	printf("%d\n", height[0]);
 	if (abs(side) == 1)
 		color[1] = (side == 1) ? 0xFFFF00 : 0xFFFF;
 	else if (abs(side) == 2)
-		color[1] = (side == 1) ? 0xFF0000 : 0xFF;
+		color[1] = (side == 2) ? 0xFF0000 : 0xFF;
 	else
 		color[1] = 0xFFFFFF;
 	height[1] = HEIGHT / 2 + length * 2;
@@ -100,17 +103,18 @@ void	raycasting(t_all data)
 		{
 			data.tmp.sx += data.tmp.dx;
 			mapx += stepx;
-			side = (data.tmp.view.x < 0) ? -2 : 2;
+			side = 0;
 		}
 		else
 		{
 			data.tmp.sy += data.tmp.dy;
 			mapy += stepy;
-			side = (data.tmp.view.y < 0) ? -1 : 1;
+			side = 1;
 		}
 		if (data.map.map[mapx][mapy] || mapx == data.map.limitx || mapy == data.map.limity || !mapx || !mapy)
 		{
 			side = (mapx == data.map.limitx || mapy == data.map.limity) ? 0 : side;
+//			wall_size(data, sqrt(pow(data.map.player.x - (double)mapx, 2) + pow(data.map.player.y - (double)mapy, 2)), side);
 			wall_size(data, sqrt(pow(data.map.player.x - (double)mapx, 2) + pow(data.map.player.y - (double)mapy, 2)), side);
 			break ;
 		}

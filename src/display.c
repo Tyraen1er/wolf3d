@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/29 11:52:17 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/30 02:10:15 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/30 14:26:28 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,15 @@ int		press_key(int keycode, t_all *dta)
 */
 	if (keycode == 123 || keycode == 124)
 	{
-		deg += (keycode == 123) ? 5 : -5;
+		deg += (keycode == 123) ? -5 : 5;
 		deg = (abs(deg) == 36000) ? 0 : deg;
 		dta->map.view = (t_point){cos(0.0174533 * deg), sin(0.0174533 * deg)};
 	}
-	if (keycode == 125)
+	if (keycode == 125 || keycode == 126)
 	{
-		dta->map.view = (t_point){cos(0.0174533 * (deg + FOV / 2)), sin(0.0174533 * (deg + FOV / 2))};
-		dta->map.player.x -= dta->map.view.x / 5;
-		dta->map.player.y -= dta->map.view.y / 5;
-	}
-	if (keycode == 126)
-	{
-		dta->map.view = (t_point){cos(0.0174533 * (deg + FOV / 2)), sin(0.0174533 * (deg + FOV / 2))};
-		if (!dta->map.map[(int)(dta->map.player.x + dta->map.view.x / 5)])
-			dta->map.player.x += dta->map.view.x / 5;
-		if (!dta->map.map[(int)(dta->map.player.y + dta->map.view.y / 5)])
-			dta->map.player.y += dta->map.view.y / 5;
+		dta->tmp.view = (t_point){cos(0.0174533 * (deg + (FOV / 2))), sin(0.0174533 * (deg + FOV / 2))};
+		dta->map.player.x = dta->map.player.x + (keycode == 126 ? -dta->tmp.view.x : dta->tmp.view.x) / 5;
+		dta->map.player.y = dta->map.player.x + (keycode == 126 ? -dta->tmp.view.y : dta->tmp.view.y) / 5;
 	}
 	play(*dta);
 	return (0);
