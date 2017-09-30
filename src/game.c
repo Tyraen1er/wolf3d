@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:38 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/30 02:12:52 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/30 02:15:20 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ void	wall_size(t_all dta, double length, int side)
 	//	couleur du plafond
 	color[0] = 0X808080;
 	// limite haute du mur en y
-	height[0] = HEIGHT / 2 - length / 2;
+	height[0] = HEIGHT / 2 - length * 2;
 	if (abs(side) == 1)
 		color[1] = (side == 1) ? 0xFFFF00 : 0xFFFF;
 	else if (abs(side) == 2)
 		color[1] = (side == 1) ? 0xFF0000 : 0xFF;
 	else
 		color[1] = 0xFFFFFF;
-	height[1] = HEIGHT / 2 + length / 2;
+	height[1] = HEIGHT / 2 + length * 2;
 	//	couleur du sol
 	color[2] = 0X663300;
 	if (HEIGHT < height[1])
