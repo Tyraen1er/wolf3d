@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:38 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/29 19:15:22 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/30 02:12:52 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*
  **	int height = point de separation des couleurs
-*/
+ */
 void	fill_img(int x, int *height, int *color, int *img)
 {
 	int		a;
@@ -48,7 +48,12 @@ void	wall_size(t_all dta, double length, int side)
 	color[0] = 0X808080;
 	// limite haute du mur en y
 	height[0] = HEIGHT / 2 - length / 2;
-	color[1] = (side) ? 0xFF0000 : 0xFF;
+	if (abs(side) == 1)
+		color[1] = (side == 1) ? 0xFFFF00 : 0xFFFF;
+	else if (abs(side) == 2)
+		color[1] = (side == 1) ? 0xFF0000 : 0xFF;
+	else
+		color[1] = 0xFFFFFF;
 	height[1] = HEIGHT / 2 + length / 2;
 	//	couleur du sol
 	color[2] = 0X663300;
@@ -59,60 +64,54 @@ void	wall_size(t_all dta, double length, int side)
 
 void	raycasting(t_all data)
 {
-	int	mapxy[2];
-	double sidedistxy[2];
-	double deltadistxy[2];
-	int	stepxy[2];
+	int	mapx;
+	int	mapy;
+	int	stepx;
+	int	stepy;
 	int	side;
 
-	mapxy[0] = (int)(data.tmp.rayposx);
-	mapxy[1] = (int)(data.tmp.rayposy);
-	deltadistxy[0] = sqrt(1 + (data.tmp.raydiry * data.tmp.raydiry) / (data.tmp.raydirx * data.tmp.raydirx));
-	deltadistxy[1] = sqrt(1 + (data.tmp.raydirx * data.tmp.raydirx) / (data.tmp.raydiry * data.tmp.raydiry));
-	if (data.tmp.raydirx < 0)
+	mapx = (int)data.map.player.x;
+	mapy = (int)data.map.player.y;
+	data.tmp.dx = sqrt(1 + (data.tmp.view.y * data.tmp.view.y) / (data.tmp.view.x * data.tmp.view.x));
+	data.tmp.dy = sqrt(1 + (data.tmp.view.x * data.tmp.view.x) / (data.tmp.view.y * data.tmp.view.y));
+	if (data.tmp.view.x < 0)
 	{
-		stepxy[0] = -1;
-		sidedistxy[0] = (data.tmp.rayposx - mapxy[0]) * deltadistxy[0];
+		stepx = -1;
+		data.tmp.sx = (data.map.player.x - (double)mapx) * data.tmp.dx;
 	}
 	else
 	{
-		stepxy[0] = 1;
-		sidedistxy[0] = (mapxy[0] + 1.0 - data.tmp.rayposx) * deltadistxy[0];
+		stepx = 1;
+		data.tmp.sx = ((double)mapx + 1.0 - data.map.player.x) * data.tmp.dx;
 	}
-	if (data.tmp.raydiry < 0)
+	if (data.tmp.view.y < 0)
 	{
-		stepxy[1] = -1;
-		sidedistxy[1] = (data.tmp.rayposy - mapxy[1]) * deltadistxy[1];
+		stepy = -1;
+		data.tmp.sy = (data.map.player.y - (double)mapy) * data.tmp.dy;
 	}
 	else
 	{
-		stepxy[1] = 1;
-		sidedistxy[1] = (mapxy[1] + 1.0 - data.tmp.rayposy) * deltadistxy[1];
+		stepy = 1;
+		data.tmp.sy = ((double)mapy + 1.0 - data.map.player.y) * data.tmp.dy;
 	}
-	printf("salut mec ça va tu vas bien ?\n");
 	while (1)
 	{
-		if (sidedistxy[0] < sidedistxy[1])
+		if (data.tmp.sx < data.tmp.sy)
 		{
-			sidedistxy[0] += deltadistxy[0];
-			mapxy[0] += stepxy[0];
-			side = 0;
+			data.tmp.sx += data.tmp.dx;
+			mapx += stepx;
+			side = (data.tmp.view.x < 0) ? -2 : 2;
 		}
 		else
 		{
-			sidedistxy[1] += deltadistxy[1];
-			mapxy[1] += stepxy[1];
-			side = 1;
+			data.tmp.sy += data.tmp.dy;
+			mapy += stepy;
+			side = (data.tmp.view.y < 0) ? -1 : 1;
 		}
-		printf("map[%d][%d]\n", mapxy[0], mapxy[1]);
-		printf("== %f\n", data.map.map[mapxy[1]][mapxy[0]]);
-		if (data.map.map[mapxy[1]][mapxy[0]] || mapxy[1] == data.map.limity || mapxy[0] == data.map.limitx)
+		if (data.map.map[mapx][mapy] || mapx == data.map.limitx || mapy == data.map.limity || !mapx || !mapy)
 		{
-			printf("on se presente ? Mais non tu nous connais !\n");
-			if (side == 0)
-				wall_size(data, (mapxy[0] - data.tmp.rayposx + (1 - stepxy[0]) / 2) / data.tmp.raydirx, side);
-			else
-				wall_size(data, (mapxy[1] - data.tmp.rayposy + (1 - stepxy[1]) / 2) / data.tmp.raydiry, side);
+			side = (mapx == data.map.limitx || mapy == data.map.limity) ? 0 : side;
+			wall_size(data, sqrt(pow(data.map.player.x - (double)mapx, 2) + pow(data.map.player.y - (double)mapy, 2)), side);
 			break ;
 		}
 	}
@@ -120,24 +119,19 @@ void	raycasting(t_all data)
 
 void	play(t_all data)
 {
-	double	fov;
+	double	radian;
 
 	data.tmp.pixelx = 0;
 	while (data.tmp.pixelx < WIDTH)
 	{
-		fov = (data.tmp.pixelx + 1) * WIDTH / 160;
-		data.map.view = (t_point){cosh(0.0174533 * fov), sinh(0.0174533 * fov)};
-//foireux
-		data.tmp.camerax = 2 * data.tmp.pixelx / WIDTH -1;
-		data.tmp.rayposx = data.map.player.x;
-		data.tmp.rayposy = data.map.player.y;
-		data.tmp.raydirx = data.map.view.x;
-		data.tmp.raydiry = data.map.view.y;
-		printf("data.tmp.pixelx = %d\nvecteur(%f\t%f)\n", data.tmp.pixelx, data.map.view.x, data.map.view.y);
+		data.tmp.fov = (double)data.tmp.pixelx * (double)FOV / (double)WIDTH;
+		radian = 0.0174533 * data.tmp.fov;
+		data.tmp.view.x = cos(radian) * data.map.view.x - sin(radian) * data.map.view.y;
+		data.tmp.view.y = sin(radian) * data.map.view.x + cos(radian) * data.map.view.y;
 		raycasting(data);
 		++data.tmp.pixelx;
 	}
-	printf("Hello World !\n");
+	printf("Hello World !\nAffichage de l image\n");
 	mlx_put_image_to_window(data.mlx.init, data.mlx.win, data.mlx.image.addr, 0, 0);
 	(void)data;
 	return ;

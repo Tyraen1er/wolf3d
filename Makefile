@@ -6,7 +6,7 @@
 #    By: eferrand <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/23 22:43:33 by eferrand          #+#    #+#              #
-#    Updated: 2017/06/13 01:23:03 by eferrand         ###   ########.fr        #
+#    Updated: 2017/09/29 23:42:53 by eferrand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,11 +37,11 @@ LIB_MLX_LINK	:=	-L $(LIB_MLX) -l mlx -framework OpenGL -framework Appkit
 
 # our project
 INCLUDES		:=	$(LIB_FT_INC) $(LIB_MLX_INC) -I$(INC_DIR)
-LINK			:=	$(LIB_FT_LINK) $(LIB_MLX_LINK) -fsanitize=address -O2
+LINK			:=	$(LIB_FT_LINK) $(LIB_MLX_LINK) -fsanitize=address -g -O0
 
 # compiler and flags
 CC				:=	gcc
-CFLAGS			:=	-Wall -Werror -Wextra -fsanitize=address
+CFLAGS			:=	-Wall -Werror -Wextra -fsanitize=address -g -O0
 
 all: obj libs $(NAME)
 

@@ -6,7 +6,7 @@
 #    By: eferrand <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/18 22:08:18 by eferrand          #+#    #+#              #
-#    Updated: 2017/06/15 15:56:37 by eferrand         ###   ########.fr        #
+#    Updated: 2017/09/29 23:43:28 by eferrand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,7 +96,7 @@ FILE_LIST	:=	ft_memset.c					\
 OBJ_FILES	:=	$(addprefix $(OBJ_DIR)/,$(FILE_LIST:.c=.o))
 INCLUDES	:=	-I $(INC_DIR)
 CC			:=	gcc
-CFLAGS		:=	-Wall -Wextra -Werror
+CFLAGS		:=	-Wall -Wextra -Werror -g -O0 -fsanitize=address
 
 all: obj $(NAME)
 
