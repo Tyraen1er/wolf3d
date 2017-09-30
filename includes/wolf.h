@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 08:21:53 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/30 02:09:52 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/30 18:29:54 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@
 # define WIDTH 1280
 # define HEIGHT 720
 # define WALL 600
-# define FOV 60
+# define RAD (M_PI / 3)
 
 typedef struct	s_map
 {
 	int 		limitx;
 	int 		limity;
+	double		radian;
 	double		**map;
 	t_point		player;
 	t_point		view;
@@ -34,7 +35,7 @@ typedef struct	s_map
 typedef struct	s_tmp
 {
 	int			pixelx;
-	double		fov;
+	double		radian;
 	double		sx;
 	double		sy;
 	double		dx;
@@ -45,7 +46,7 @@ typedef struct	s_tmp
 typedef struct	s_tmp
 {
 	int			pixelx;
-	double		fov;
+	double		radian;
 	t_point		view;
 }				t_tmp;
 */

@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:38 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/30 14:38:21 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/09/30 19:01:50 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,30 @@ void	fill_img(int x, int *height, int *color, int *img)
 // a refaire
 void	wall_size(t_all dta, double length, int side)
 {
-	int	hauteur_mur;
+	int	hauteur;
 	int	height[2];
 	int	color[3];
 
-	hauteur_mur = WALL / ((cos(PI2 * (fabs(side + 90 - a) / 360)) * length)
+	//hauteur = WALL / (length * cos(abs(side) == 2 ? dta.tmp.radian + dta.map.radian : M_PI / 2 - dta.tmp.radian + dta.map.radian));
+	hauteur = WALL / (length * fabs(cos(abs(side) == 2 ? (dta.tmp.radian + dta.map.radian) / length : dta.tmp.radian + dta.map.radian - M_PI / 2)));
+//	printf("%f\n", fabs(dta.tmp.radian + dta.map.radian));
+//	printf("%d\n", hauteur);
+//	hauteur = WALL / length;
 	//	couleur du plafond
 	color[0] = 0X808080;
 	// limite haute du mur en y
-	height[0] =  ((1 / length) * WALL + HEIGHT / 2);
-	printf("%d\n", height[0]);
+	height[0] =  HEIGHT / 2 - hauteur / 2;
 	if (abs(side) == 1)
 		color[1] = (side == 1) ? 0xFFFF00 : 0xFFFF;
 	else if (abs(side) == 2)
 		color[1] = (side == 2) ? 0xFF0000 : 0xFF;
 	else
 		color[1] = 0xFFFFFF;
-	height[1] = HEIGHT / 2 + length * 2;
+	height[1] = HEIGHT / 2 + hauteur / 2;
 	//	couleur du sol
 	color[2] = 0X663300;
+	if (height[0] < 0)
+		height[0] = 0;
 	if (HEIGHT < height[1])
 		height[1] = HEIGHT - 1;
 	fill_img(dta.tmp.pixelx, height, color, (int*)dta.mlx.image.img);
@@ -103,17 +108,18 @@ void	raycasting(t_all data)
 		{
 			data.tmp.sx += data.tmp.dx;
 			mapx += stepx;
-			side = 0;
+			side = (stepx < 0) ? -2 : 2;
 		}
 		else
 		{
 			data.tmp.sy += data.tmp.dy;
 			mapy += stepy;
-			side = 1;
+			side = (stepy < 0) ? -1 : 1;
 		}
-		if (data.map.map[mapx][mapy] || mapx == data.map.limitx || mapy == data.map.limity || !mapx || !mapy)
+		if (mapx == data.map.limitx || mapy == data.map.limity || mapx < 0 || mapy < 0 || data.map.map[mapy][mapx])
 		{
-			side = (mapx == data.map.limitx || mapy == data.map.limity) ? 0 : side;
+//			printf("%f\n", data.map.map[data.map.limity - 1][data.map.limitx- 1]);
+			side = (mapx == data.map.limitx || mapy == data.map.limity || mapy == -1 || mapx == -1) ? 0 : side;
 //			wall_size(data, sqrt(pow(data.map.player.x - (double)mapx, 2) + pow(data.map.player.y - (double)mapy, 2)), side);
 			wall_size(data, sqrt(pow(data.map.player.x - (double)mapx, 2) + pow(data.map.player.y - (double)mapy, 2)), side);
 			break ;
@@ -123,19 +129,15 @@ void	raycasting(t_all data)
 
 void	play(t_all data)
 {
-	double	radian;
-
 	data.tmp.pixelx = 0;
 	while (data.tmp.pixelx < WIDTH)
 	{
-		data.tmp.fov = (double)data.tmp.pixelx * (double)FOV / (double)WIDTH;
-		radian = 0.0174533 * data.tmp.fov;
-		data.tmp.view.x = cos(radian) * data.map.view.x - sin(radian) * data.map.view.y;
-		data.tmp.view.y = sin(radian) * data.map.view.x + cos(radian) * data.map.view.y;
+		data.tmp.radian = (double)data.tmp.pixelx * RAD / (double)WIDTH;
+		data.tmp.view.x = cos(data.tmp.radian) * data.map.view.x - sin(data.tmp.radian) * data.map.view.y;
+		data.tmp.view.y = sin(data.tmp.radian) * data.map.view.x + cos(data.tmp.radian) * data.map.view.y;
 		raycasting(data);
 		++data.tmp.pixelx;
 	}
-	printf("Hello World !\nAffichage de l image\n");
 	mlx_put_image_to_window(data.mlx.init, data.mlx.win, data.mlx.image.addr, 0, 0);
 	(void)data;
 	return ;
