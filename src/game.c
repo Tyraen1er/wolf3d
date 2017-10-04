@@ -6,19 +6,15 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:38 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/30 19:01:50 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/10/01 04:16:10 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-
-/*
- **	int height = point de separation des couleurs
- */
 void	fill_img(int x, int *height, int *color, int *img)
 {
-	int		a;
+	int	a;
 
 	a = 0;
 	while (a < height[0] - 1)
@@ -38,107 +34,83 @@ void	fill_img(int x, int *height, int *color, int *img)
 	}
 }
 
-// a refaire
-void	wall_size(t_all dta, double length, int side)
+void	wall_size(t_all dta, double distwall)
 {
-	int	hauteur;
+	int	dim;
 	int	height[2];
 	int	color[3];
 
-	//hauteur = WALL / (length * cos(abs(side) == 2 ? dta.tmp.radian + dta.map.radian : M_PI / 2 - dta.tmp.radian + dta.map.radian));
-	hauteur = WALL / (length * fabs(cos(abs(side) == 2 ? (dta.tmp.radian + dta.map.radian) / length : dta.tmp.radian + dta.map.radian - M_PI / 2)));
-//	printf("%f\n", fabs(dta.tmp.radian + dta.map.radian));
-//	printf("%d\n", hauteur);
-//	hauteur = WALL / length;
-	//	couleur du plafond
+	dim = (HEIGHT / distwall);
 	color[0] = 0X808080;
-	// limite haute du mur en y
-	height[0] =  HEIGHT / 2 - hauteur / 2;
-	if (abs(side) == 1)
-		color[1] = (side == 1) ? 0xFFFF00 : 0xFFFF;
-	else if (abs(side) == 2)
-		color[1] = (side == 2) ? 0xFF0000 : 0xFF;
+	if (!dta.tmp.side)
+		color[1] = (dta.tmp.stepx < 0) ? 0XFF0000 : 0xFF00;
 	else
-		color[1] = 0xFFFFFF;
-	height[1] = HEIGHT / 2 + hauteur / 2;
-	//	couleur du sol
+		color[1] = (dta.tmp.stepy < 0) ? 0xFF : 0xFFFF;
 	color[2] = 0X663300;
+	height[0] = -dim / 2 + HEIGHT / 2;
 	if (height[0] < 0)
 		height[0] = 0;
-	if (HEIGHT < height[1])
+	height[1] = dim / 2 + HEIGHT / 2;
+	if (HEIGHT <= height[1])
 		height[1] = HEIGHT - 1;
 	fill_img(dta.tmp.pixelx, height, color, (int*)dta.mlx.image.img);
 }
 
-void	raycasting(t_all data)
+void	raycasting(t_all dt)
 {
-	int	mapx;
-	int	mapy;
-	int	stepx;
-	int	stepy;
-	int	side;
-
-	mapx = (int)data.map.player.x;
-	mapy = (int)data.map.player.y;
-	data.tmp.dx = sqrt(1 + (data.tmp.view.y * data.tmp.view.y) / (data.tmp.view.x * data.tmp.view.x));
-	data.tmp.dy = sqrt(1 + (data.tmp.view.x * data.tmp.view.x) / (data.tmp.view.y * data.tmp.view.y));
-	if (data.tmp.view.x < 0)
-	{
-		stepx = -1;
-		data.tmp.sx = (data.map.player.x - (double)mapx) * data.tmp.dx;
-	}
-	else
-	{
-		stepx = 1;
-		data.tmp.sx = ((double)mapx + 1.0 - data.map.player.x) * data.tmp.dx;
-	}
-	if (data.tmp.view.y < 0)
-	{
-		stepy = -1;
-		data.tmp.sy = (data.map.player.y - (double)mapy) * data.tmp.dy;
-	}
-	else
-	{
-		stepy = 1;
-		data.tmp.sy = ((double)mapy + 1.0 - data.map.player.y) * data.tmp.dy;
-	}
 	while (1)
 	{
-		if (data.tmp.sx < data.tmp.sy)
+		if (dt.tmp.s.x < dt.tmp.s.y && !(dt.tmp.side = 0))
 		{
-			data.tmp.sx += data.tmp.dx;
-			mapx += stepx;
-			side = (stepx < 0) ? -2 : 2;
+			dt.tmp.s.x += dt.tmp.delta.x;
+			dt.tmp.mapx += dt.tmp.stepx;
 		}
-		else
+		else if ((dt.tmp.side = 1))
 		{
-			data.tmp.sy += data.tmp.dy;
-			mapy += stepy;
-			side = (stepy < 0) ? -1 : 1;
+			dt.tmp.s.y += dt.tmp.delta.y;
+			dt.tmp.mapy += dt.tmp.stepy;
 		}
-		if (mapx == data.map.limitx || mapy == data.map.limity || mapx < 0 || mapy < 0 || data.map.map[mapy][mapx])
+		if (dt.map.map[dt.tmp.mapy][dt.tmp.mapx])
 		{
-//			printf("%f\n", data.map.map[data.map.limity - 1][data.map.limitx- 1]);
-			side = (mapx == data.map.limitx || mapy == data.map.limity || mapy == -1 || mapx == -1) ? 0 : side;
-//			wall_size(data, sqrt(pow(data.map.player.x - (double)mapx, 2) + pow(data.map.player.y - (double)mapy, 2)), side);
-			wall_size(data, sqrt(pow(data.map.player.x - (double)mapx, 2) + pow(data.map.player.y - (double)mapy, 2)), side);
+			if (dt.tmp.side == 0)
+				wall_size(dt, (dt.tmp.mapx - dt.map.player.x +
+							(1 - dt.tmp.stepx) / 2) / dt.tmp.raydir.x);
+			else
+				wall_size(dt, (dt.tmp.mapy - dt.map.player.y +
+							(1 - dt.tmp.stepy) / 2) / dt.tmp.raydir.y);
 			break ;
 		}
 	}
 }
 
-void	play(t_all data)
+void	init(t_all dt)
 {
-	data.tmp.pixelx = 0;
-	while (data.tmp.pixelx < WIDTH)
+	dt.tmp.mapx = (int)dt.map.player.x;
+	dt.tmp.mapy = (int)dt.map.player.y;
+	dt.tmp.delta.x = sqrt(1 + (dt.tmp.raydir.y * dt.tmp.raydir.y) /
+			(dt.tmp.raydir.x * dt.tmp.raydir.x));
+	dt.tmp.delta.y = sqrt(1 + (dt.tmp.raydir.x * dt.tmp.raydir.x) /
+			(dt.tmp.raydir.y * dt.tmp.raydir.y));
+	dt.tmp.stepx = (dt.tmp.raydir.x < 0) ? -1 : 1;
+	dt.tmp.s.x = (dt.tmp.raydir.x < 0) ?
+		(dt.map.player.x - (double)dt.tmp.mapx) * dt.tmp.delta.x :
+		((double)dt.tmp.mapx + 1.0 - dt.map.player.x) * dt.tmp.delta.x;
+	dt.tmp.stepy = (dt.tmp.raydir.y < 0) ? -1 : 1;
+	dt.tmp.s.y = (dt.tmp.raydir.y < 0) ?
+		(dt.map.player.y - (double)dt.tmp.mapy) * dt.tmp.delta.y :
+		((double)dt.tmp.mapy + 1.0 - dt.map.player.y) * dt.tmp.delta.y;
+	raycasting(dt);
+}
+
+void	play(t_all dt)
+{
+	dt.tmp.pixelx = -1;
+	while (++dt.tmp.pixelx < WIDTH)
 	{
-		data.tmp.radian = (double)data.tmp.pixelx * RAD / (double)WIDTH;
-		data.tmp.view.x = cos(data.tmp.radian) * data.map.view.x - sin(data.tmp.radian) * data.map.view.y;
-		data.tmp.view.y = sin(data.tmp.radian) * data.map.view.x + cos(data.tmp.radian) * data.map.view.y;
-		raycasting(data);
-		++data.tmp.pixelx;
+		dt.tmp.camerax = 2 * dt.tmp.pixelx / (double)WIDTH - 1;
+		dt.tmp.raydir.x = dt.tmp.view.x + dt.map.plane.x * dt.tmp.camerax;
+		dt.tmp.raydir.y = dt.tmp.view.y + dt.map.plane.y * dt.tmp.camerax;
+		init(dt);
 	}
-	mlx_put_image_to_window(data.mlx.init, data.mlx.win, data.mlx.image.addr, 0, 0);
-	(void)data;
-	return ;
+	mlx_put_image_to_window(dt.mlx.init, dt.mlx.win, dt.mlx.image.addr, 0, 0);
 }

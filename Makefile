@@ -6,7 +6,7 @@
 #    By: eferrand <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/23 22:43:33 by eferrand          #+#    #+#              #
-#    Updated: 2017/09/29 23:42:53 by eferrand         ###   ########.fr        #
+#    Updated: 2017/10/01 05:09:38 by eferrand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,14 @@ NAME			:=	wolf3d
 # base dirs
 SRC_DIR			:=	./src
 INC_DIR			:=	./includes
-LIB_DIR			:=	./libs
+LIB_DIR			:=	./
 OBJ_DIR			:=	./obj
 
 # files to compile
 FILE_LIST		:=	display.c	\
 					pars.c		\
-					game.c
+					game.c		\
+					border.c
 
 OBJ_FILES		:= $(addprefix $(OBJ_DIR)/,$(FILE_LIST:.c=.o))
 
@@ -37,11 +38,11 @@ LIB_MLX_LINK	:=	-L $(LIB_MLX) -l mlx -framework OpenGL -framework Appkit
 
 # our project
 INCLUDES		:=	$(LIB_FT_INC) $(LIB_MLX_INC) -I$(INC_DIR)
-LINK			:=	$(LIB_FT_LINK) $(LIB_MLX_LINK) -fsanitize=address -g -O0
+LINK			:=	$(LIB_FT_LINK) $(LIB_MLX_LINK) -fsanitize=address -O0
 
 # compiler and flags
 CC				:=	gcc
-CFLAGS			:=	-Wall -Werror -Wextra -fsanitize=address -g -O0
+CFLAGS			:=	-Wall -Werror -Wextra -fsanitize=address -O0
 
 all: obj libs $(NAME)
 

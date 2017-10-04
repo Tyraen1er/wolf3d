@@ -6,7 +6,7 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 07:54:46 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/29 18:54:43 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/10/01 04:36:09 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int		checkmap(char *map)
 	{
 		while (map[a] != '\n' && map[a])
 		{
-			while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a] && map[a] != '\n')
+			while (!ft_isdigit(map[a]) && map[a] != 'X' && map[a] &&
+					map[a] != '\n')
 				++a;
 			if ((ft_isdigit(map[a]) || (map[a] == 'X' && ++x && ++a)) && ++b)
 				while (ft_isdigit(map[a]))
@@ -110,9 +111,9 @@ t_map	loadfile(char *argv)
 	map = ft_readfile(fd);
 	data.limitx = checkmap(map);
 	data.limity = nb_lines(map);
-	data.view = (t_point){0, 0};
 	if (!data.limitx && !data.limity)
 		ft_exit(1);
 	load_data(&data, map);
+	border(data);
 	return (data);
 }

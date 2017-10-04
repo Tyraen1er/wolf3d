@@ -6,36 +6,51 @@
 /*   By: eferrand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/29 11:52:17 by eferrand          #+#    #+#             */
-/*   Updated: 2017/09/30 18:37:30 by eferrand         ###   ########.fr       */
+/*   Updated: 2017/10/01 04:13:15 by eferrand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
+void	move_player(t_all *dta, double distance)
+{
+	if (!dta->map.map[(int)(dta->map.player.y +
+				dta->tmp.view.y * distance)][(int)dta->map.player.x])
+		dta->map.player.y += dta->tmp.view.y * distance;
+	if (!dta->map.map[(int)dta->map.player.y][(int)(dta->map.player.x +
+				dta->tmp.view.x * distance)])
+		dta->map.player.x += dta->tmp.view.x * distance;
+}
+
 int		press_key(int keycode, t_all *dta)
 {
+	double	olddir;
+	double	oldplane;
+	double	rot;
+
 	if (keycode == 53)
 		exit(3);
-/*
-**123 = gauche ||| 124 = droite ||| 125 = bas ||| 126 = haut
-*/
 	if (keycode == 123 || keycode == 124)
 	{
-		dta->map.radian += (keycode == 123) ? -M_PI/32 : M_PI/32;
-		dta->map.radian = (fabs(dta->map.radian) == 2 * M_PI) ? 0 : dta->map.radian;
-		dta->map.view = (t_point){cos(dta->map.radian), sin(dta->map.radian)};
+		rot = (keycode == 123) ? M_PI / 30 : -M_PI / 30;
+		olddir = dta->tmp.view.x;
+		dta->tmp.view.x =
+			dta->tmp.view.x * cos(rot) - dta->tmp.view.y * sin(rot);
+		dta->tmp.view.y = olddir * sin(rot) + dta->tmp.view.y * cos(rot);
+		oldplane = dta->map.plane.x;
+		dta->map.plane.x =
+			dta->map.plane.x * cos(rot) - dta->map.plane.y * sin(rot);
+		dta->map.plane.y = oldplane * sin(rot) + dta->map.plane.y * cos(rot);
 	}
-	if (keycode == 125 || keycode == 126)
-	{
-		dta->tmp.view = (t_point){cos(dta->map.radian + RAD / 2), sin(dta->map.radian + RAD / 2)};
-		dta->map.player.x = dta->map.player.x + (keycode == 125 ? -dta->tmp.view.x : dta->tmp.view.x) / 5;
-		dta->map.player.y = dta->map.player.x + (keycode == 125 ? -dta->tmp.view.y : dta->tmp.view.y) / 5;
-	}
+	if (keycode == 125)
+		move_player(dta, -WALK);
+	if (keycode == 126)
+		move_player(dta, WALK);
 	play(*dta);
 	return (0);
 }
 
-static int  hook_close(t_mlx mlx)
+int		hook_close(t_mlx mlx)
 {
 	(void)mlx;
 	exit(3);
@@ -53,28 +68,25 @@ void	display(t_all *data)
 	s_l = 0;
 	endian = 0;
 	if (!(mlx.init = mlx_init()) ||
-		!(mlx.win = mlx_new_window(mlx.init, WIDTH, HEIGHT, "wolf42"))
-		|| !(mlx.image.addr = mlx_new_image(mlx.init, WIDTH, HEIGHT)) ||
-		!(mlx.image.img =
-		mlx_get_data_addr(mlx.image.addr, &(bpp), &(s_l), &(endian))))
+			!(mlx.win = mlx_new_window(mlx.init, WIDTH, HEIGHT, "wolf42"))
+			|| !(mlx.image.addr = mlx_new_image(mlx.init, WIDTH, HEIGHT)) ||
+			!(mlx.image.img =
+				mlx_get_data_addr(mlx.image.addr, &(bpp), &(s_l), &(endian))))
 		exit(3);
 	mlx_hook(mlx.win, 2, (1L << 0), press_key, data);
 	mlx_hook(mlx.win, 17, 1L << 0, hook_close, NULL);
 	data->mlx = mlx;
-	data->map.view = (t_point){1, 0};
-	data->map.radian = 0;
 	play(*data);
 	mlx_loop(mlx.init);
 }
 
-int main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	t_all data;
 
 	data.map = (argc == 2) ? loadfile(argv[1]) : loadfile("creationsample");
-//	printf("debut programme\n");
-//	printf("%f\n", data.map.map[0][0]);
-//	printf("debut programme2\n");
+	data.tmp.view = (t_point){-1, 0};
+	data.map.plane = (t_point){0, 0.60};
 	display(&data);
 	return (0);
 }
